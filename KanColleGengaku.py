@@ -1,9 +1,46 @@
 from store import *
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, after_this_request
+from io import StringIO as IO
+import gzip
+import functools
+
+def gzipped(f):
+    @functools.wraps(f)
+    def view_func(*args, **kwargs):
+        @after_this_request
+        def zipper(response):
+            accept_encoding = request.headers.get('Accept-Encoding', '')
+
+            if 'gzip' not in accept_encoding.lower():
+                return response
+
+            response.direct_passthrough = False
+
+            if (response.status_code < 200 or
+                response.status_code >= 300 or
+                'Content-Encoding' in response.headers):
+                return response
+            gzip_buffer = IO()
+            gzip_file = gzip.GzipFile(mode='wb',
+                                      fileobj=gzip_buffer)
+            gzip_file.write(response.data)
+            gzip_file.close()
+
+            response.data = gzip_buffer.getvalue()
+            response.headers['Content-Encoding'] = 'gzip'
+            response.headers['Vary'] = 'Accept-Encoding'
+            response.headers['Content-Length'] = len(response.data)
+
+            return response
+
+        return f(*args, **kwargs)
+
+    return view_func
+
+
 
 app = Flask(__name__)
-
 
 ship_types = {'19': '工作艦', '15': '補給艦', '12': '超弩級戦艦', '3': '軽巡洋艦', '5': '重巡洋艦', '18': '装甲空母', '6': '航空巡洋艦', '16': '水上機母艦', '13': '潜水艦', '17': '揚陸艦', '1': '海防艦', '2': '駆逐艦', '4': '重雷装巡洋艦', '9': '戦艦', '8': '高速戦艦', '14': '潜水空母', '7': '軽空母', '11': '正規空母', '10': '航空戦艦'}
 ship_list = eval(redis.get('ship_list'))
@@ -13,6 +50,7 @@ for t in ship_list.values():
         ship_names[ship_id] = t[ship_id]
 
 @app.route('/')
+@gzipped
 def index():
     ship_list_sorted = [{'id': i, 'name': ship_types[i], 'ships': []} for i in sorted(ship_types.keys(), key=lambda x: int(x))]
     for ship_type in ship_list_sorted:
@@ -22,6 +60,7 @@ def index():
 
 
 @app.route('/get')
+@gzipped
 def get_data():
     gengaku_table = eval(redis.get('gengaku_table'))
     target_ships = set(filter(lambda x: x, request.args.get('ships', '').split(',')))
