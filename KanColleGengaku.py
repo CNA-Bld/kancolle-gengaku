@@ -1,7 +1,7 @@
 from store import *
 
 from flask import Flask, render_template, request, after_this_request
-from io import StringIO as IO
+from io import BytesIO as IO
 import gzip
 import functools
 
