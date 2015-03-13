@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block additional_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/css/bootstrap3/bootstrap-switch.min.css">
     <style>
         .checkboxes {
             margin: 5px 10px;
@@ -10,9 +11,20 @@
 {% endblock %}
 
 {% block additional_js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/js/bootstrap-switch.min.js"></script>
     <script>
         $(function () {
             $("[type='checkbox']").bootstrapSwitch();
+
+            $("#submit-button").click(function () {
+                var str = "";
+                $("[type='checkbox']").each(function () {
+                    if ($(this).is(':checked')) {
+                        str = str.concat($(this).attr('data-id'), ',');
+                    }
+                });
+                window.location.href = "/get?ships=".concat(str);
+            });
         });
     </script>
 {% endblock %}
@@ -29,7 +41,8 @@
                     <div class="row">
                         {% for ship in ship_type.ships %}
                             <div class="checkboxes">
-                            <input type="checkbox" id="checkbox-{{ ship.id }}" data-label-text="{{ ship.name }}" data-size="small" data-label-width="50">
+                                <input type="checkbox" data-id="{{ ship.id }}" data-label-text="{{ ship.name }}" data-size="small"
+                                       data-label-width="50">
                             </div>
                         {% endfor %}
                     </div>
@@ -37,5 +50,11 @@
             </div>
         {% endif %}
     {% endfor %}
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button class="btn btn-primary btn-block" id="submit-button">夜观天象！</button>
+        </div>
+    </div>
 
 {% endblock %}
