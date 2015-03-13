@@ -42,4 +42,4 @@ def get_data():
     return render_template('result.html', results=results, target_ships={i: ship_names[i] for i in target_ships})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
