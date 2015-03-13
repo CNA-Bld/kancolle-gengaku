@@ -6,12 +6,13 @@
 
 {% block main_body %}
 
+    {% for cons_type, cons_type_name in [('general', '普通建造'), ('large', '巨型建造')] %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            普通建造
+            {{ cons_type_name }}
         </div>
         <div class="panel-body table-responsive">
-            {% if results.general %}
+            {% if results[cons_type] %}
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -21,69 +22,31 @@
                         <th>铝</th>
                         <th>资材</th>
                         <th>出货率</th>
-                        <th>总出货数</th>
-                        <th>公式使用数</th>
+                        <th>次数期望</th>
                         {% for id, name in target_ships|dictsort %}
                             <th>{{ name }}</th>
                         {% endfor %}
                     </tr>
                     </thead>
                     <tbody>
-                    {% for recipe in results.general %}
+                    {% for recipe in results[cons_type] %}
                         <tr>
                         <td>{{ recipe.resource[0] }}</td><td>{{ recipe.resource[1] }}</td><td>{{ recipe.resource[2] }}</td><td>{{ recipe.resource[3] }}</td><td>{{ recipe.resource[4] }}</td>
-                        <td>{{ (recipe.probability*100)|round(6) }}%</td><td>{{ recipe.succ_sum }}</td><td>{{ recipe.sum }}</td>
+                        <td>{{ (recipe.probability*100)|round(6) }}% ({{ recipe.succ_sum }}/{{ recipe.sum }})</td>
+                        <td>{{ ((1-recipe.probability)/recipe.probability+1)|round(2) }}</td>
                         {% for id, name in target_ships|dictsort %}
-                            <td>{{ recipe.succ_individual[id] }}</td>
+                            <td>{{ recipe.succ_individual[id] }} ({{ (recipe.succ_individual[id]/recipe.sum*100)|round(4) }}%)</td>
                         {% endfor %}
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             {% else %}
-                <p>普建赌不出来的呀。</p>
+                赌不出来的呀。
             {% endif %}
         </div>
     </div>
+    {% endfor %}
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            巨型建造
-        </div>
-        <div class="panel-body table-responsive">
-            {% if results.large %}
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th>油</th>
-                        <th>弹</th>
-                        <th>钢</th>
-                        <th>铝</th>
-                        <th>资材</th>
-                        <th>出货率</th>
-                        <th>总出货数</th>
-                        <th>公式使用数</th>
-                        {% for id, name in target_ships|dictsort %}
-                            <th>{{ name }}</th>
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for recipe in results.large %}
-                        <tr>
-                        <td>{{ recipe.resource[0] }}</td><td>{{ recipe.resource[1] }}</td><td>{{ recipe.resource[2] }}</td><td>{{ recipe.resource[3] }}</td><td>{{ recipe.resource[4] }}</td>
-                        <td>{{ (recipe.probability*100)|round(6) }}%</td><td>{{ recipe.succ_sum }}</td><td>{{ recipe.sum }}</td>
-                        {% for id, name in target_ships|dictsort %}
-                            <td>{{ recipe.succ_individual[id] }}</td>
-                        {% endfor %}
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>大建赌不出来的呀。</p>
-            {% endif %}
-        </div>
-    </div>
 
 {% endblock %}
