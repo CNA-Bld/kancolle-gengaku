@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block additional_css %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/css/bootstrap3/bootstrap-switch.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-switch.min.css">
     <style>
         .checkboxes {
             margin: 5px 10px;
@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block additional_js %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/js/bootstrap-switch.min.js"></script>
+    <script src="/static/js/bootstrap-switch.min.js"></script>
     <script>
         $(function () {
             $("[type='checkbox']").bootstrapSwitch();
