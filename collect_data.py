@@ -2,15 +2,13 @@ import json
 import requests
 import re
 
-from iron_cache import *
+from store import redis
 
 HOME_URL = 'http://unlockacgweb.galstars.net/Kancollewiki/viewCreateShipLogList'
 INFO_URL = 'http://unlockacgweb.galstars.net/Kancollewiki/viewCreateShipLog?sid='
 
 gengaku_table = {'general': {}, 'large': {}}
 ship_names = {}
-
-cache = IronCache()
 
 
 def get_key(data_line):
@@ -48,8 +46,8 @@ def main():
         for ship_id in t:
             # ship_names[ship_id] = t[ship_id]
             process_construct_data(get_construct_data(ship_id))
-    cache.put(cache="kancolle_gengaku", key="ship_list", value=ship_list)
-    cache.put(cache="kancolle_gengaku", key="gengaku_table", value=repr(gengaku_table))
+    redis.set("ship_list", repr(ship_list))
+    redis.set("gengaku_table", repr(gengaku_table))
 
 
 if __name__ == '__main__':
