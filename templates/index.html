@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block additional_css %}
+    <style>
+        .checkboxes {
+            margin: 5px 10px;
+            display: inline-block;
+        }
+    </style>
+{% endblock %}
+
+{% block additional_js %}
+    <script>
+        $(function () {
+            $("[type='checkbox']").bootstrapSwitch();
+        });
+    </script>
+{% endblock %}
+
+{% block main_body %}
+
+    {% for ship_type in ship_list %}
+        {% if ship_type.ships %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {{ ship_type.name }}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        {% for ship in ship_type.ships %}
+                            <div class="checkboxes">
+                            <input type="checkbox" id="checkbox-{{ ship.id }}" data-label-text="{{ ship.name }}" data-size="small" data-label-width="50">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
