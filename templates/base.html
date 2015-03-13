@@ -75,16 +75,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
+{% block additional_js %} {% endblock %}
+
 <script>
     $(function () {
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% for category, message in messages %}
-                $.bootstrapGrowl("{{ message }}", {
-                    type: '{{ category }}'
-                });
-            {% endfor %}
-        {% endwith %}
-
         $.ajax({
             url: 'http://api.hitokoto.us/rand',
             dataType: "jsonp",
@@ -98,9 +92,6 @@
         });
     });
 </script>
-
-
-{% block additional_js %} {% endblock %}
 
 </body>
 </html>
