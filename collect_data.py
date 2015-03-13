@@ -49,7 +49,7 @@ def main():
             # ship_names[ship_id] = t[ship_id]
             process_construct_data(get_construct_data(ship_id))
     cache.put(cache="kancolle_gengaku", key="ship_list", value=ship_list)
-    cache.put(cache="kancolle_gengaku", key="gengaku_table", value=gengaku_table)
+    cache.put(cache="kancolle_gengaku", key="gengaku_table", value=repr(gengaku_table))
 
 
 if __name__ == '__main__':
