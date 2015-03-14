@@ -37,6 +37,7 @@ def process_construct_data(construct_data):
                     key = get_key(data_line)
                     if key not in gengaku_table[construct_type]:
                         gengaku_table[construct_type][key] = {'sum': int(data_line['sum']), 'results': {}}
+                    gengaku_table[construct_type][key]['sum'] = max(int(data_line['sum']), gengaku_table[construct_type][key]['sum'])
                     gengaku_table[construct_type][key]['results'][construct_data['ship']] = int(data_line['succeed'])
 
 
