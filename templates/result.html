@@ -35,7 +35,7 @@
                         <td>{{ (recipe.probability*100)|round(6) }}% ({{ recipe.succ_sum }}/{{ recipe.sum }})</td>
                         <td>{{ ((1-recipe.probability)/recipe.probability+1)|round(2) }}</td>
                         {% for id, name in target_ships|dictsort %}
-                            <td>{{ recipe.succ_individual[id] }} ({{ (recipe.succ_individual[id]/recipe.sum*100)|round(4) }}%)</td>
+                            <td>{% if recipe.succ_individual[id] %}{{ recipe.succ_individual[id] }} ({{ (recipe.succ_individual[id]/recipe.sum*100)|round(4) }}%){% endif %}</td>
                         {% endfor %}
                         </tr>
                     {% endfor %}
