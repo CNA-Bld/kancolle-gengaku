@@ -34,10 +34,10 @@
     {% for ship_type in ship_list %}
         {% if ship_type.ships %}
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    {{ ship_type.name }}
+                <div class="panel-heading panel-collapsed">
+                    <span class="glyphicon glyphicon-chevron-down"></span> {{ ship_type.name }}
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" style="display: none;">
                     <div class="row">
                         {% for ship in ship_type.ships %}
                             <div class="checkboxes">

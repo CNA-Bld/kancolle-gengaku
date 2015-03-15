@@ -9,7 +9,7 @@
     {% for cons_type, cons_type_name in [('general', '普通建造'), ('large', '巨型建造')] %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            {{ cons_type_name }}
+            <span class="glyphicon glyphicon-chevron-up"></span> {{ cons_type_name }}
         </div>
         <div class="panel-body table-responsive">
             {% if results[cons_type] %}
@@ -33,7 +33,7 @@
                         <tr>
                         <td>{{ recipe.resource[0] }}</td><td>{{ recipe.resource[1] }}</td><td>{{ recipe.resource[2] }}</td><td>{{ recipe.resource[3] }}</td><td>{{ recipe.resource[4] }}</td>
                         <td>{{ (recipe.probability*100)|round(6) }}% ({{ recipe.succ_sum }}/{{ recipe.sum }})</td>
-                        <td>{{ ((1-recipe.probability)/recipe.probability+1)|round(2) }}</td>
+                        <td>{{ (1/recipe.probability)|round(2) }}</td>
                         {% for id, name in target_ships|dictsort %}
                             <td>{% if recipe.succ_individual[id] %}{{ recipe.succ_individual[id] }} ({{ (recipe.succ_individual[id]/recipe.sum*100)|round(4) }}%){% endif %}</td>
                         {% endfor %}

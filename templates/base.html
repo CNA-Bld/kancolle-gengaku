@@ -68,6 +68,7 @@
 <footer class="footer">
     <div class="container">
         <p class="text-muted" id="hitokoto">「少女祈祷中……」</p>
+
         <p class="text-muted">KanColleGengaku Test Mode</p>
     </div>
 </footer>
@@ -76,6 +77,22 @@
 <script src="/static/js/bootstrap.min.js"></script>
 
 {% block additional_js %} {% endblock %}
+
+<script>
+    $(function () {
+        $('.panel-heading').on("click", function (e) {
+            if ($(this).hasClass('panel-collapsed')) {
+                $(this).parents('.panel').find('.panel-body').slideDown();
+                $(this).removeClass('panel-collapsed');
+                $(this).find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+            } else {
+                $(this).parents('.panel').find('.panel-body').slideUp();
+                $(this).addClass('panel-collapsed');
+                $(this).find('span').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+            }
+        });
+    });
+</script>
 
 <script>
     $(function () {
