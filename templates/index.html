@@ -25,6 +25,10 @@
                 });
                 window.location.href = "/get?ships=".concat(str);
             });
+
+            $("#reset-button").click(function () {
+                $("[type='checkbox']").bootstrapSwitch('state', false);
+            });
         });
     </script>
 {% endblock %}
@@ -53,7 +57,14 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <button class="btn btn-primary btn-block" id="submit-button">夜观天象！</button>
+            <div class="btn-group btn-group-justified" role="group">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-primary btn-block" id="submit-button">夜观天象！</button>
+                </div>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-default btn-block" id="reset-button">清空选择</button>
+                </div>
+            </div>
         </div>
     </div>
 
