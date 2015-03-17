@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, after_this_request
 from io import BytesIO as IO
 import gzip
 import functools
+from math import sqrt
+
 
 def gzipped(f):
     @functools.wraps(f)
@@ -17,9 +19,7 @@ def gzipped(f):
 
             response.direct_passthrough = False
 
-            if (response.status_code < 200 or
-                response.status_code >= 300 or
-                'Content-Encoding' in response.headers):
+            if response.status_code < 200 or response.status_code >= 300 or 'Content-Encoding' in response.headers:
                 return response
             gzip_buffer = IO()
             gzip_file = gzip.GzipFile(mode='wb',
@@ -39,15 +39,16 @@ def gzipped(f):
     return view_func
 
 
-
 app = Flask(__name__)
 
-ship_types = {'19': '工作艦', '15': '補給艦', '12': '超弩級戦艦', '3': '軽巡洋艦', '5': '重巡洋艦', '18': '装甲空母', '6': '航空巡洋艦', '16': '水上機母艦', '13': '潜水艦', '17': '揚陸艦', '1': '海防艦', '2': '駆逐艦', '4': '重雷装巡洋艦', '9': '戦艦', '8': '高速戦艦', '14': '潜水空母', '7': '軽空母', '11': '正規空母', '10': '航空戦艦'}
+ship_types = {'19': '工作艦', '15': '補給艦', '12': '超弩級戦艦', '3': '軽巡洋艦', '5': '重巡洋艦', '18': '装甲空母', '6': '航空巡洋艦', '16': '水上機母艦', '13': '潜水艦', '17': '揚陸艦',
+              '1': '海防艦', '2': '駆逐艦', '4': '重雷装巡洋艦', '9': '戦艦', '8': '高速戦艦', '14': '潜水空母', '7': '軽空母', '11': '正規空母', '10': '航空戦艦'}
 ship_list = eval(redis.get('ship_list'))
 ship_names = {}
 for t in ship_list.values():
     for ship_id in t:
         ship_names[ship_id] = t[ship_id]
+
 
 @app.route('/')
 @gzipped
@@ -76,9 +77,12 @@ def get_data():
                 succ_individual = {i: value['results'][i] for i in intersect}
                 succ_sum = sum(succ_individual.values())
                 probability = succ_sum / value['sum']
-                results[cons_type].append({'resource': key, 'probability': probability, 'succ_sum': succ_sum, 'succ_individual': succ_individual, 'sum': value['sum']})
+                results[cons_type].append({'resource': key, 'probability': probability,
+                                           'succ_sum': succ_sum, 'succ_individual': succ_individual,
+                                           'sum': value['sum'], 'stddev': sqrt(probability * (1 - probability) / value['sum'])})
         results[cons_type].sort(key=lambda x: x['probability'], reverse=True)
     return render_template('result.html', results=results, target_ships={i: ship_names[i] for i in target_ships})
+
 
 if __name__ == '__main__':
     app.run(debug=False)
