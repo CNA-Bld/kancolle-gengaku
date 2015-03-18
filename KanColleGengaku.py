@@ -91,6 +91,8 @@ def get_recipe():
     gengaku_table = eval(redis.get('gengaku_table'))
     cons_type = request.args.get('type', '')
     recipe = tuple(json.loads(request.args.get('recipe', '')))
+    if cons_type not in gengaku_table or recipe not in gengaku_table[cons_type]:
+        return '蛤？You trying attack me meh?'
     return render_template('recipe.html', recipe=recipe, result=gengaku_table[cons_type][recipe], ship_names=ship_names)
 
 
@@ -107,7 +109,7 @@ def gengaku2_get():
     ship_id = request.args.get('id', '')
     if ship_id not in ship_names:
         return '蛤？You trying attack me meh?'
-    return render_template('gengaku2_result.html', name=ship_names[ship_id], result=gengaku2_table[ship_id], cons_name={'general': '普建', 'large20': '大建 / 20 资材', 'large1': '大建 / 1 资材神教'}.get)
+    return render_template('gengaku2_result.html', id=ship_id, name=ship_names[ship_id], result=gengaku2_table[ship_id], cons_name={'general': '普建', 'large20': '大建 / 20 资材', 'large1': '大建 / 1 资材神教'}.get)
 
 
 if __name__ == '__main__':

@@ -2,7 +2,13 @@
 
 {% block additional_css %}{% endblock %}
 
-{% block additional_js %}{% endblock %}
+{% block additional_js %}
+<script>
+$(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
+{% endblock %}
 
 {% block main_body %}
 
@@ -29,7 +35,7 @@
                 </tr>
                 {% for ship, number in result.results|dictsort %}
                     <tr>
-                    <td>{{ ship_names[ship] }}</td>
+                    <td><a class="btn btn-default btn-xs" href="/gengaku2/get?id={{ ship }}" role="button" data-toggle="tooltip" title="九一式玄学弹">{{ ship_names[ship] }}</a></td>
                     <td>{{ number }}</td>
                     <td>{{ (100*number/result.sum)|round(6) }}%</td>
                     <td>{{ (result.sum/number)|round(4) }}</td>

@@ -31,7 +31,7 @@ $(function() {
                         <th>出货率</th>
                         <th>次数期望</th>
                         {% for id, name in target_ships|dictsort %}
-                            <th>{{ name }}</th>
+                            <th><a class="btn btn-default btn-xs" href="/gengaku2/get?id={{ id }}" role="button" data-toggle="tooltip" title="九一式玄学弹">{{ name }}</a></th>
                         {% endfor %}
                     </tr>
                     </thead>
