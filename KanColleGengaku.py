@@ -1,6 +1,7 @@
 from store import *
 
 from flask import Flask, render_template, request, after_this_request
+import json
 from io import BytesIO as IO
 import gzip
 import functools
@@ -81,7 +82,16 @@ def get_data():
                                            'succ_sum': succ_sum, 'succ_individual': succ_individual,
                                            'sum': value['sum'], 'stddev': sqrt(probability * (1 - probability) / value['sum'])})
         results[cons_type].sort(key=lambda x: x['probability'], reverse=True)
-    return render_template('result.html', results=results, target_ships={i: ship_names[i] for i in target_ships})
+    return render_template('result.html', results=results, target_ships={i: ship_names[i] for i in target_ships}, list=list)
+
+
+@app.route('/recipe')
+@gzipped
+def get_recipe():
+    gengaku_table = eval(redis.get('gengaku_table'))
+    cons_type = request.args.get('type', '')
+    recipe = tuple(json.loads(request.args.get('recipe', '')))
+    return render_template('recipe.html', recipe=recipe, result=gengaku_table[cons_type][recipe], ship_names=ship_names)
 
 
 if __name__ == '__main__':

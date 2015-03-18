@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block additional_css %}{% endblock %}
+
+{% block additional_js %}{% endblock %}
+
+{% block main_body %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            {{ recipe|join('/') }} 出货统计
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>舰船</th>
+                    <th>出货次数</th>
+                    <th>出货率</th>
+                    <th>期望次数</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>共计</td>
+                    <td>{{ result.sum }}</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                {% for ship, number in result.results|dictsort %}
+                    <tr>
+                    <td>{{ ship_names[ship] }}</td>
+                    <td>{{ number }}</td>
+                    <td>{{ (100*number/result.sum)|round(6) }}%</td>
+                    <td>{{ (result.sum/number)|round(4) }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+{% endblock %}
