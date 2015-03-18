@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="/static/css/bootstrap-select.min.css">
+{% endblock %}
+
+{% block additional_js %}
+    <script src="/static/js/bootstrap-select.min.js"></script>
+{% endblock %}
+
+{% block main_body %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading panel-collapsed">九一式玄学弹</div>
+        <div class="panel-body">
+            <div class="row-fluid">
+                {% for ship_type in ship_list %}
+                    {% if ship_type.ships %}
+
+
+                        <select class="selectpicker" data-width="100%" multiple title='{{ ship_type.name }}'
+                                onchange="location = this.options[this.selectedIndex].value;">
+                            {% for ship in ship_type.ships %}
+                                <option value="get?id={{ ship.id }}">{{ ship.name }}</option>
+                            {% endfor %}
+                        </select>
+
+
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

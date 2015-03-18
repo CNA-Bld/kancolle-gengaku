@@ -49,15 +49,15 @@ ship_names = {}
 for t in ship_list.values():
     for ship_id in t:
         ship_names[ship_id] = t[ship_id]
+ship_list_sorted = [{'id': i, 'name': ship_types[i], 'ships': []} for i in sorted(ship_types.keys(), key=lambda x: int(x))]
+for ship_type in ship_list_sorted:
+    if ship_type['id'] in ship_list:
+        ship_type['ships'] = [{'id': i, 'name': ship_list[ship_type['id']][i]} for i in sorted(ship_list[ship_type['id']], key=lambda x: int(x))]
 
 
 @app.route('/')
 @gzipped
 def index():
-    ship_list_sorted = [{'id': i, 'name': ship_types[i], 'ships': []} for i in sorted(ship_types.keys(), key=lambda x: int(x))]
-    for ship_type in ship_list_sorted:
-        if ship_type['id'] in ship_list:
-            ship_type['ships'] = [{'id': i, 'name': ship_list[ship_type['id']][i]} for i in sorted(ship_list[ship_type['id']], key=lambda x: int(x))]
     return render_template('index.html', ship_list=ship_list_sorted)
 
 
@@ -92,6 +92,22 @@ def get_recipe():
     cons_type = request.args.get('type', '')
     recipe = tuple(json.loads(request.args.get('recipe', '')))
     return render_template('recipe.html', recipe=recipe, result=gengaku_table[cons_type][recipe], ship_names=ship_names)
+
+
+@app.route('/gengaku2/')
+@gzipped
+def gengaku2_index():
+    return render_template('gengaku2.html', ship_list=ship_list_sorted)
+
+
+@app.route('/gengaku2/get')
+@gzipped
+def gengaku2_get():
+    gengaku2_table = eval(redis.get('gengaku2_table'))
+    ship_id = request.args.get('id', '')
+    if ship_id not in ship_names:
+        return '蛤？You trying attack me meh?'
+    return render_template('gengaku2_result.html', name=ship_names[ship_id], result=gengaku2_table[ship_id], cons_name={'general': '普建', 'large20': '大建 / 20 资材', 'large1': '大建 / 1 资材神教'}.get)
 
 
 if __name__ == '__main__':

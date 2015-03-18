@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="/static/css/bootstrap-select.min.css">
+{% endblock %}
+
+{% block additional_js %}
+    <script src="/static/js/bootstrap-select.min.js"></script>
+{% endblock %}
+
+{% block main_body %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading panel-collapsed">九一式玄学弹: {{ name }}</div>
+        <div class="panel-body table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>建造类型</th>
+                    <th>油</th>
+                    <th>弹</th>
+                    <th>钢</th>
+                    <th>铝</th>
+                    <th>目标出货率</th>
+                    <th>玄学参数</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for cons_type, value in result|dictsort %}
+                    {% for recipe, weight in value|dictsort %}
+                        <tr>
+                        <td>{{ cons_name(cons_type) }}</td>
+                        {% for i in recipe %}<td>{% if cons_type=='general' %}{{ i|round|int }}{% else %}{{ i|round(-1)|int }}{% endif %}</td>{% endfor %}
+                        <td>{{ (weight[0]*100)|round(6) }}%</td><td>{{ weight[1]|round(6) }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
