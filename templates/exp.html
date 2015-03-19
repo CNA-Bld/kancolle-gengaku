@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block additional_css %}
+    <link rel="stylesheet" href="/static/css/bootstrap-select.min.css">
+{% endblock %}
+
+{% block additional_js %}
+    <script src="/static/js/bootstrap-select.min.js"></script>
+    <script>
+        $(function () {
+            var map_exp = {'1-1': 30, '1-2': 50, '1-3': 80, '1-4': 100, '1-5': 150,
+                '2-1': 120, '2-2': 150, '2-3': 200, '2-4': 300, '2-5': 250,
+                '3-1': 310, '3-2': 320, '3-3': 330, '3-4': 350, '3-5': 400,
+                '4-1': 310, '4-2': 320, '4-3': 330, '4-4': 340,
+                '5-1': 360, '5-2': 380, '5-3': 400, '5-4': 420, '5-5': 450,
+                '6-1': 380, '6-2': 420};
+            var lvl_exp = [0, 0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500, 6600, 7800, 9100, 10500, 12000, 13600, 15300, 17100, 19000, 21000, 23100, 25300, 27600, 30000, 32500, 35100, 37800, 40600, 43500, 46500, 49600, 52800, 56100, 59500, 63000, 66600, 70300, 74100, 78000, 82000, 86100, 90300, 94600, 99000, 103500, 108100, 112800, 117600, 122500, 127500, 132700, 138100, 143700, 149500, 155500, 161700, 168100, 174700, 181500, 188500, 195800, 203400, 211300, 219500, 228000, 236800, 245900, 255300, 265000, 275000, 285400, 296200, 307400, 319000, 331000, 343400, 356200, 369400, 383000, 397000, 411500, 426500, 442000, 458000, 474500, 491500, 509000, 527000, 545500, 564500, 584500, 606500, 631500, 661500, 701500, 761500, 851500, 1000000];
+
+            for (var key in map_exp) {
+                if (map_exp.hasOwnProperty(key)) {
+                    $('#map').append($('<option>', {value:key}).text(key));
+                }
+            }
+            $('#map').selectpicker('refresh');
+
+            function calculate() {
+                var exp_once = map_exp[$('#map').val()];
+                if ($("#resultS").is(':checked')) exp_once *= 1.2;
+                if ($("#flagship").is(':checked')) exp_once *= 1.5;
+                if ($("#mvp").is(':checked')) exp_once *= 2.0;
+
+                var exp_required = lvl_exp[parseInt($('#targetLevel').val())] - lvl_exp[parseInt($('#currentLevel').val()) + 1] + parseInt($('#nextExp').val());
+
+                $('#result').val(Math.ceil(exp_required / exp_once));
+            }
+
+            $('form :input').change(calculate);
+            calculate();
+        })
+    </script>
+{% endblock %}
+
+{% block main_body %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading panel-collapsed">
+            经验计算装置
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="result" class="col-sm-2 control-label">次数</label>
+
+                    <div class="col-sm-10">
+                        <input class="form-control" type="number" id="result" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="currentLevel" class="col-sm-2 control-label">现等级</label>
+
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="currentLevel" value="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="targetLevel" class="col-sm-2 control-label">目标等级</label>
+
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="targetLevel" value="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="nextExp" class="col-sm-2 control-label">距离下一级 Exp</label>
+
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="nextExp" value="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="map" class="col-sm-2 control-label">地图</label>
+
+                    <div class="col-sm-10">
+                        <select class="selectpicker" data-width="100%" id="map"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="resultS"> S 胜
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="flagship"> 旗舰
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="mvp"> MVP
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

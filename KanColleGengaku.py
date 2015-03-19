@@ -109,7 +109,14 @@ def gengaku2_get():
     ship_id = request.args.get('id', '')
     if ship_id not in ship_names:
         return '蛤？You trying attack me meh?'
-    return render_template('gengaku2_result.html', id=ship_id, name=ship_names[ship_id], result=gengaku2_table[ship_id], cons_name={'general': '普建', 'large20': '大建 / 20 资材', 'large1': '大建 / 1 资材神教'}.get)
+    return render_template('gengaku2_result.html', id=ship_id, name=ship_names[ship_id], result=gengaku2_table[ship_id],
+                           cons_name={'general': '普建', 'large20': '大建 / 20 资材', 'large1': '大建 / 1 资材神教'}.get)
+
+
+@app.route('/exp/')
+@gzipped
+def exp_calculator():
+    return render_template('exp.html')
 
 
 if __name__ == '__main__':
