@@ -18,7 +18,7 @@
 
             for (var key in map_exp) {
                 if (map_exp.hasOwnProperty(key)) {
-                    $('#map').append($('<option>', {value:key}).text(key));
+                    $('#map').append($('<option>', {value: key}).text(key));
                 }
             }
             $('#map').selectpicker('refresh');
@@ -59,21 +59,21 @@
                     <label for="currentLevel" class="col-sm-2 control-label">现等级</label>
 
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="currentLevel" value="1">
+                        <input type="tel" class="form-control" id="currentLevel" value="1">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="targetLevel" class="col-sm-2 control-label">目标等级</label>
 
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="targetLevel" value="1">
+                        <input type="tel" class="form-control" id="targetLevel" value="1">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="nextExp" class="col-sm-2 control-label">距离下一级 Exp</label>
 
                     <div class="col-sm-10">
-                        <input type="number" class="form-control" id="nextExp" value="100">
+                        <input type="tel" class="form-control" id="nextExp" value="100">
                     </div>
                 </div>
                 <div class="form-group">
