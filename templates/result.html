@@ -40,7 +40,7 @@ $(function() {
                         <tr>
                         <td><a class="btn btn-default btn-xs" href="/recipe?type={{ cons_type }}&recipe={{ list(recipe.resource) }}" role="button">详情</a></td>
                         <td>{{ recipe.resource[0] }}</td><td>{{ recipe.resource[1] }}</td><td>{{ recipe.resource[2] }}</td><td>{{ recipe.resource[3] }}</td><td>{{ recipe.resource[4] }}</td>
-                        <td data-toggle="tooltip" title="95%-CI: ±{{ (196*recipe.stddev)|round(6) }}%<br/>99%-CI: ±{{ (258*recipe.stddev)|round(6) }}%" data-container="body" data-html="true">{{ (recipe.probability*100)|round(6) }}% ({{ recipe.succ_sum }}/{{ recipe.sum }})</td>
+                        <td data-toggle="tooltip" title="50%-CI: ±{{ (67*recipe.stddev)|round(6) }}%<br/>85%-CI: ±{{ (144*recipe.stddev)|round(6) }}%" data-container="body" data-html="true">{{ (recipe.probability*100)|round(6) }}% ({{ recipe.succ_sum }}/{{ recipe.sum }})</td>
                         <td data-toggle="tooltip" title="Expected Resource Usage: {% for i in recipe.resource[:-1] %}{{ (i*1.0/recipe.probability)|round|int }}/{% endfor %}{{ (recipe.resource[4]*1.0/recipe.probability)|round|int }}" data-container="body">{{ (1/recipe.probability)|round(2) }}</td>
                         {% for id, name in target_ships|dictsort %}
                             <td>{% if recipe.succ_individual[id] %}{{ recipe.succ_individual[id] }} ({{ (recipe.succ_individual[id]/recipe.sum*100)|round(4) }}%){% endif %}</td>
