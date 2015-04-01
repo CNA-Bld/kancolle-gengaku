@@ -58,7 +58,7 @@ for ship_type in ship_list_sorted:
 @app.route('/')
 @gzipped
 def index():
-    return render_template('index.html', ship_list=ship_list_sorted)
+    return render_template('index.html', ship_list=ship_list_sorted, syncui=request.args.get('beta', ''))
 
 
 @app.route('/get')
@@ -82,7 +82,7 @@ def get_data():
                                            'succ_sum': succ_sum, 'succ_individual': succ_individual,
                                            'sum': value['sum'], 'stddev': sqrt(probability * (1 - probability) / value['sum'])})
         results[cons_type].sort(key=lambda x: x['probability'], reverse=True)
-    return render_template('result.html', results=results, target_ships={i: ship_names[i] for i in target_ships}, list=list)
+    return render_template('result.html', results=results, target_ships={i: ship_names[i] for i in target_ships}, list=list, syncui=request.args.get('beta', ''))
 
 
 @app.route('/recipe')
@@ -93,13 +93,13 @@ def get_recipe():
     recipe = tuple(json.loads(request.args.get('recipe', '')))
     if cons_type not in gengaku_table or recipe not in gengaku_table[cons_type]:
         return '蛤？You trying attack me meh?'
-    return render_template('recipe.html', recipe=recipe, result=gengaku_table[cons_type][recipe], ship_names=ship_names)
+    return render_template('recipe.html', recipe=recipe, result=gengaku_table[cons_type][recipe], ship_names=ship_names, syncui=request.args.get('beta', ''))
 
 
 @app.route('/gengaku2/')
 @gzipped
 def gengaku2_index():
-    return render_template('gengaku2.html', ship_list=ship_list_sorted)
+    return render_template('gengaku2.html', ship_list=ship_list_sorted, syncui=request.args.get('beta', ''))
 
 
 @app.route('/gengaku2/get')
@@ -110,13 +110,13 @@ def gengaku2_get():
     if ship_id not in ship_names:
         return '蛤？You trying attack me meh?'
     return render_template('gengaku2_result.html', id=ship_id, name=ship_names[ship_id], result=gengaku2_table[ship_id],
-                           cons_name={'general': '普建', 'large20': '大建 / 20 资材', 'large1': '大建 / 1 资材神教'}.get)
+                           cons_name={'general': '普建', 'large20': '大建 / 20 资材', 'large1': '大建 / 1 资材神教'}.get, syncui=request.args.get('beta', ''))
 
 
 @app.route('/exp/')
 @gzipped
 def exp_calculator():
-    return render_template('exp.html')
+    return render_template('exp.html', syncui=request.args.get('beta', ''))
 
 
 if __name__ == '__main__':
