@@ -45,7 +45,8 @@
                     'max': [2.0]
                 }
             }).Link('lower').to($("#kongouCoefficient")).on({
-                slide: calculate
+                slide: calculate,
+                set: calculate
             });
 
             $("#minMVP").click(function() { $("#kongouCoefficientSlider").val(1); });
