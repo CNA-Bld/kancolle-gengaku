@@ -33,13 +33,13 @@
 
                 var exp_required = lvl_exp[parseInt($('#targetLevel').val())] - lvl_exp[parseInt($('#currentLevel').val()) + 1] + parseInt($('#nextExp').val());
 
-                $('#result').val(Math.ceil(exp_required / exp_once).toString() + ' (' + exp_required.toString() + ' / ' + exp_once.toString() + ')');
+                $('#result').val(Math.ceil(exp_required / exp_once).toString() + ' (' + exp_required.toString() + ' / ' + exp_once.toFixed() + ')');
             };
 
             $("#kongouCoefficientSlider").noUiSlider({
                 start: [1.0],
                 connect: 'lower',
-                step: 0.1,
+                step: 0.05,
                 range: {
                     'min': [1.0],
                     'max': [2.0]
