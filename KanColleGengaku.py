@@ -1,6 +1,6 @@
 from store import *
 
-from flask import Flask, render_template, request, after_this_request
+from flask import Flask, render_template, request, after_this_request, abort, jsonify
 import json
 from io import BytesIO as IO
 import gzip
@@ -94,6 +94,43 @@ def get_recipe():
     if cons_type not in gengaku_table or recipe not in gengaku_table[cons_type]:
         return '蛤？You trying attack me meh?'
     return render_template('recipe.html', recipe=recipe, result=gengaku_table[cons_type][recipe], ship_names=ship_names)
+
+
+@app.route('/api')
+@gzipped
+def api():
+    gengaku_table = eval(redis.get('gengaku_table'))
+    api_type = request.args.get('api', '')
+    if api_type == '':
+        return jsonify(response='我可以！')
+    elif api_type == 'ships':
+        return jsonify(response=ship_list_sorted)
+    elif api_type == 'construct':
+        target_ships = set(str(i) for i in json.loads(request.args.get('ships', '')))
+        for ship in target_ships:
+            if ship not in ship_names:
+                abort(400)
+        results = {'ships': sorted(list(target_ships), key=lambda x: int(x))}
+        for cons_type in ['general', 'large']:
+            results[cons_type] = []
+            for (key, value) in gengaku_table[cons_type].items():
+                intersect = target_ships.intersection(set(value['results'].keys()))
+                if intersect:
+                    succ_individual = {i: value['results'][i] for i in intersect}
+                    results[cons_type].append({'resources': key, 'succ_individual': succ_individual,
+                                               'sum': value['sum']})
+        return jsonify(response=results)
+    elif api_type == 'recipe':
+        cons_type = request.args.get('type', '')
+        try:
+            recipe = tuple(json.loads(request.args.get('recipe', '')))
+        except:
+            abort(400)
+        if cons_type not in gengaku_table or recipe not in gengaku_table[cons_type]:
+            abort(400)
+        return jsonify(response=gengaku_table[cons_type][recipe])
+    else:
+        abort(400)
 
 
 @app.route('/gengaku2/')
