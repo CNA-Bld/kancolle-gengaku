@@ -120,6 +120,9 @@ def api():
                     results[cons_type].append({'resources': key, 'succ_individual': succ_individual,
                                                'sum': value['sum']})
         return jsonify(response=results)
+    elif api_type == 'all_large':
+        large_table = gengaku_table['large']
+        return jsonify(response=[{'recipe': _, 'sum': large_table[_]['sum'], 'results': large_table[_]['results']} for _ in large_table])
     elif api_type == 'recipe':
         cons_type = request.args.get('type', '')
         try:
