@@ -1,0 +1,67 @@
+{% raw %}
+<!doctype html>
+<html lang="en" ng-app="kcgengakuApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1"/>
+    <title>艦これ玄学工具套装改二</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.0/angular-material.min.js"></script>
+    <script src="/static/v3/js/app.js"></script>
+    <script src="/static/v3/js/controllers.js"></script>
+    <script src="/static/v3/js/services.js"></script>
+    <link rel="stylesheet"
+          href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.0/angular-material.min.css">
+    <link rel="stylesheet" href="https://rawgit.com/iamisti/md-data-table/master/dist/md-data-table-style.css">
+
+    <style>
+        #hitokoto {
+            text-indent: -1em;
+            padding-left: 2em;
+            font-size: smaller;
+        }
+    </style>
+</head>
+<body layout="column" ng-controller="MainCtrl">
+
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" aria-label="Navigation" ng-click="toggleSidenav()">
+            <md-icon md-svg-icon=""></md-icon>
+        </md-button>
+        <h2>
+            <span>艦これ玄学工具套装改二</span>
+        </h2>
+        <span flex></span>
+    </div>
+</md-toolbar>
+
+<md-sidenav md-component-id="left" class="md-sidenav-left">
+    <md-menu-content class="sidenav-menu">
+        <md-menu-item>
+            <h4>艦これ玄学工具套装改二</h4>
+        </md-menu-item>
+        <md-menu-item ng-repeat="item in sidenavItems" ng-click="sidenavItemClick(item)">
+            <md-button>
+                {{ item.title }}
+            </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+            <p id="hitokoto" ng-if="hitokoto == undefined">「少女祈祷中……」</p>
+
+            <p id="hitokoto" title="{{ hitokoto.hover }}" ng-if="hitokoto != undefined">「{{ hitokoto.hitokoto
+                }}」</p>
+        </md-menu-item>
+    </md-menu-content>
+</md-sidenav>
+
+
+<div ng-view></div>
+
+</body>
+</html>
+{% endraw %}

@@ -1,11 +1,12 @@
-from store import *
-
-from flask import Flask, render_template, request, after_this_request, abort, jsonify
 import json
-from io import BytesIO as IO
 import gzip
-import functools
 from math import sqrt
+
+from store import *
+from flask import Flask, render_template, request, after_this_request, abort, jsonify
+from io import BytesIO as IO
+import functools
+import ctype_data
 
 
 def gzipped(f):
@@ -53,7 +54,7 @@ for t in ship_list.values():
 ship_list_sorted = [{'id': i, 'name': ship_types[i], 'ships': []} for i in sorted(ship_types.keys(), key=lambda x: int(x))]
 for ship_type in ship_list_sorted:
     if ship_type['id'] in ship_list:
-        ship_type['ships'] = [{'id': i, 'name': ship_list[ship_type['id']][i]} for i in sorted(ship_list[ship_type['id']], key=lambda x: int(x))]
+        ship_type['ships'] = [ctype_data.data[i] for i in sorted(ship_list[ship_type['id']], key=lambda x: int(x))]
 
 
 @app.route('/')
@@ -123,7 +124,8 @@ def api():
         return jsonify(response=results)
     elif api_type == 'all_large':
         large_table = gengaku_table['large']
-        return jsonify(response=[{'recipe': _, 'sum': large_table[_]['sum'], 'results': large_table[_]['results']} for _ in large_table])
+        return jsonify(response=[{'recipe': _, 'sum': large_table[_]['sum'],
+                                  'results': large_table[_]['results']} for _ in large_table])
     elif api_type == 'recipe':
         cons_type = request.args.get('type', '')
         try:
@@ -132,6 +134,9 @@ def api():
             abort(400)
         if cons_type not in gengaku_table or recipe not in gengaku_table[cons_type]:
             abort(400)
+        d = gengaku_table[cons_type][recipe]
+        d['results'] = sorted([{'ship': _, 'num': d['results'][_]} for _ in d['results']],
+                              key=lambda _: _['num'], reverse=True)
         return jsonify(response=gengaku_table[cons_type][recipe])
     else:
         abort(400)
@@ -158,6 +163,11 @@ def gengaku2_get():
 @gzipped
 def exp_calculator():
     return render_template('exp.html')
+
+
+@app.route('/v3/')
+def v3():
+    return render_template('v3.html')
 
 
 if __name__ == '__main__':

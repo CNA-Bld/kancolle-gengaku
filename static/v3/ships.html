@@ -1,0 +1,92 @@
+<style>
+    .contact-item {
+        box-sizing: border-box;
+        float: left;
+    }
+
+    .contact-item.selected {
+        opacity: 0.5;
+    }
+
+    .contact-item.selected h3 {
+        opacity: 0.5;
+    }
+
+    .contact-item .md-list-item-text {
+        padding: 8px 0 !important;
+    }
+
+    .contact-item .md-list-item-text h3 {
+        margin: 0 !important;
+        padding: 0;
+        line-height: 1.2em !important;
+    }
+
+    .contact-item .md-list-item-text h3, .contact-item .md-list-item-text p {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    @media (min-width: 900px) {
+        .contact-item {
+            width: 20%;
+        }
+    }
+
+    @media (min-width: 600px) and (max-width: 900px) {
+        .contact-item {
+            width: 33%;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .contact-item {
+            width: 50%;
+        }
+    }
+
+
+</style>
+
+
+<md-contact-chips
+        ng-model="selectedShips"
+        md-contacts="querySearch($query)"
+        md-contact-name="name"
+        md-contact-image="image"
+        md-contact-email="type"
+        md-require-match="true"
+        md-highlight-flags="i"
+        filter-selected="true"
+        placeholder="选择舰船……">
+</md-contact-chips>
+
+<div class="inset md-padding" layout="row" layout-align="center">
+    <md-button flex class="md-primary md-raised" ng-click="changeView('result')">夜观天象</md-button>
+    <md-button flex class="md-raised" ng-click="selectedShips.length = 0">清空选择</md-button>
+</div>
+
+<div layout="row" layout-align="space-around" ng-if="ships.length == 0">
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
+
+<md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="{{ shipType.name }}" ng-repeat="shipType in shipsByType">
+        <md-content class="md-padding tab-content">
+            <md-list>
+                <md-list-item class="md-2-line contact-item" ng-repeat="ship in shipType.ships"
+                              ng-click="toggleSelected(ship)"
+                              ng-class="selectedShips.indexOf(ship) >= 0 ? 'selected' : ''">
+                    <img ng-src="{{ ship.image }}" class="md-avatar" alt="{{ ship.name }}"/>
+
+                    <div class="md-list-item-text compact">
+                        <h3>{{ ship.name }}</h3>
+
+                        <p>{{ ship.type }}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </md-tab>
+</md-tabs>

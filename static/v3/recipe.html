@@ -1,0 +1,29 @@
+<md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="{{ recipe }} 出货统计">
+        <md-content class="md-padding tab-content">
+            <div layout="row" layout-align="space-around" ng-if="recipeData == undefined">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <table class="mdDataTable" ng-if="recipeData != undefined">
+                <tr>
+                    <th>舰船</th>
+                    <th>出货次数</th>
+                    <th>出货率</th>
+                    <th>期望</th>
+                </tr>
+                <tr>
+                    <td>共计</td>
+                    <td>{{ recipeData.sum }}</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr ng-repeat="ship in recipeData.results">
+                    <td>{{ getShipById(ship.ship).name }}</td>
+                    <td>{{ ship.num }}</td>
+                    <td>{{ (100.0*ship.num/recipeData.sum).toFixed(6) }}%</td>
+                    <td>{{ (1.0*recipeData.sum/ship.num).toFixed(2) }}</td>
+                </tr>
+            </table>
+        </md-content>
+    </md-tab>
+</md-tabs>

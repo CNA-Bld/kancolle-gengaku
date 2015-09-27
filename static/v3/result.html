@@ -1,0 +1,48 @@
+<style>
+    .tr-recipe {
+        cursor: pointer;
+    }
+</style>
+
+<md-contact-chips
+        ng-model="selectedShips"
+        md-contact-name="name"
+        md-contact-image="image"
+        md-contact-email="type"
+        readonly="true">
+</md-contact-chips>
+
+<md-tabs md-dynamic-height md-border-bottom>
+    <md-tab label="{{ {'general': '普通建造', 'large': '巨型建造'}[constructType] }}"
+            ng-repeat="constructType in ['general', 'large']">
+        <md-content class="md-padding tab-content">
+            <div layout="row" layout-align="space-around" ng-if="constructData == undefined">
+                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
+            <div ng-if="constructData[constructType].length == 0">赌不出来的呀</div>
+            <table ng-if="constructData[constructType].length > 0" class="mdDataTable">
+                <tr>
+                    <th>油</th>
+                    <th>弾</th>
+                    <th>鋼</th>
+                    <th>ボ</th>
+                    <th>资材</th>
+                    <th>出货率</th>
+                    <th>期望</th>
+                    <th ng-repeat="ship in selectedShips">{{ ship.name }}</th>
+                </tr>
+                <tr ng-repeat="recipe in constructData[constructType]"
+                    ng-click="recipeClick(constructType, recipe.resources)" class="tr-recipe">
+                    <td ng-repeat="resource in recipe.resources track by $index">{{ resource }}</td>
+                    <td>{{ recipe.prob.toFixed(6) }}% ({{ recipe.succ_sum }}/{{ recipe.sum }})</td>
+                    <td>{{ (100/recipe.prob).toFixed(2) }}</td>
+                    <td ng-repeat="ship in selectedShips">
+                        <span ng-if="recipe.succ_individual[ship['id']]">
+                        {{ (100.0*recipe.succ_individual[ship['id']]/recipe.sum).toFixed(6) }}% ({{ recipe.succ_individual[ship['id']] }})
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </md-content>
+    </md-tab>
+</md-tabs>
