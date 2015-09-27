@@ -1,6 +1,7 @@
 import json
+import os
 
-JSON_DB_PATH = './json-db/db/'
+JSON_DB_PATH = os.path.dirname(os.path.realpath(__file__)) + '/json-db/db/'
 
 data = {}
 
