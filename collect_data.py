@@ -42,62 +42,6 @@ def process_construct_data(construct_data):
                     gengaku_table[construct_type][key]['results'][construct_data['ship']] = int(data_line['succeed'])
 
 
-def distance(recipe1, recipe2):
-    return sum([(recipe1[i] - recipe2[i]) ** 2 for i in range(4)])
-
-
-def build_gengaku2():
-    temp_table = {}
-    for c, d in gengaku_table.items():
-        for recipe, result in d.items():
-            for ship, number in result['results'].items():
-                if ship not in temp_table:
-                    temp_table[ship] = {i: {} for i in ['general', 'large20', 'large1']}
-                if c == 'general':
-                    temp_table[ship][c][recipe] = number / result['sum']
-                else:
-                    if recipe[4] == 20:
-                        temp_table[ship]['large20'][recipe] = number / result['sum']
-                    elif recipe[4] == 1:
-                        temp_table[ship]['large1'][recipe] = number / result['sum']
-    result_table = {}
-    for ship, data in temp_table.items():
-        result_table[ship] = {}
-        for c in ['general', 'large20', 'large1']:
-            if data[c]:
-                centers = [[0] * 4, [0] * 4]
-                weights = [0, 0]
-                tmp = 0
-                for recipe, weight in data[c].items():
-                    for i in range(4):
-                        centers[tmp][i] += weight * recipe[i]
-                    weights[tmp] += weight
-                    tmp = 1 - tmp
-                for i in range(2):
-                    for j in range(4):
-                        centers[i][j] /= weights[i]
-                for round in range(10):
-                    new_centers = [[0] * 4, [0] * 4]
-                    weights = [0, 0]
-                    sqwhts = [0, 0]
-                    counts = [0, 0]
-                    for recipe, weight in data[c].items():
-                        if distance(recipe, centers[0]) < distance(recipe, centers[1]):
-                            cluster = 0
-                        else:
-                            cluster = 1
-                        for i in range(4):
-                            new_centers[cluster][i] += weight * recipe[i]
-                        weights[cluster] += weight
-                        sqwhts[cluster] += weight*weight
-                        counts[cluster] += 1
-                    for i in range(2):
-                        for j in range(4):
-                            centers[i][j] = new_centers[i][j] / weights[i]
-                result_table[ship][c] = {tuple(centers[i]): (sqrt(sqwhts[i]/counts[i]), weights[i]) for i in range(2) if counts[i] > 0}
-    redis.set('gengaku2_table', repr(result_table))
-
-
 def main():
     ship_list = get_ship_list()
     for t in ship_list.values():
@@ -106,7 +50,6 @@ def main():
             process_construct_data(get_construct_data(ship_id))
     redis.set("ship_list", repr(ship_list))
     redis.set("gengaku_table", repr(gengaku_table))
-    build_gengaku2()
 
 
 if __name__ == '__main__':
