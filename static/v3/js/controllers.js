@@ -2,8 +2,8 @@
 
 var kcgengakuControllers = angular.module('kcgengakuControllers', []);
 
-kcgengakuControllers.controller('MainCtrl', ['$scope', '$http', '$location', '$mdSidenav',
-    function ($scope, $http, $location, $mdSidenav) {
+kcgengakuControllers.controller('MainCtrl', ['$scope', '$http', '$location', '$window', '$mdSidenav',
+    function ($scope, $http, $location, $window, $mdSidenav) {
         $scope.toggleSidenav = function () {
             $mdSidenav('left').toggle();
         };
@@ -29,6 +29,9 @@ kcgengakuControllers.controller('MainCtrl', ['$scope', '$http', '$location', '$m
                 'hitokoto': d.hitokoto
             };
         });
+        $scope.openHitokoto = function() {
+            $window.open($scope.hitokoto['link']);
+        };
     }]).controller('ShipListCtrl', ['$scope', '$location', 'sharedData',
     function ($scope, $location, sharedData) {
         $scope.selectedShips = sharedData.selectedShips;

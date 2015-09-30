@@ -16,12 +16,19 @@
     <link rel="stylesheet"
           href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.1/angular-material.min.css">
     <link rel="stylesheet" href="https://rawgit.com/iamisti/md-data-table/master/dist/md-data-table-style.css">
-
     <style>
         #hitokoto {
             text-indent: -1em;
             padding-left: 2em;
             font-size: smaller;
+        }
+
+        #hitokoto-item {
+            height: auto;
+            position: absolute;
+            bottom: 14px;
+            cursor: pointer;
+            min-width: 100%;
         }
     </style>
 </head>
@@ -50,11 +57,10 @@
             </md-button>
         </md-menu-item>
         <md-menu-divider></md-menu-divider>
-        <md-menu-item>
+        <md-menu-item id="hitokoto-item" ng-click="openHitokoto()">
             <p id="hitokoto" ng-if="hitokoto == undefined">「少女祈祷中……」</p>
 
-            <p id="hitokoto" title="{{ hitokoto.hover }}" ng-if="hitokoto != undefined">「{{ hitokoto.hitokoto
-                }}」</p>
+            <p id="hitokoto" title="{{ hitokoto.hover }}" ng-if="hitokoto != undefined">「{{ hitokoto.hitokoto }}」</p>
         </md-menu-item>
     </md-menu-content>
 </md-sidenav>
