@@ -29,7 +29,7 @@ kcgengakuControllers.controller('MainCtrl', ['$scope', '$http', '$location', '$w
                 'hitokoto': d.hitokoto
             };
         });
-        $scope.openHitokoto = function() {
+        $scope.openHitokoto = function () {
             $window.open($scope.hitokoto['link']);
         };
     }]).controller('ShipListCtrl', ['$scope', '$location', 'sharedData',
@@ -93,6 +93,9 @@ kcgengakuControllers.controller('MainCtrl', ['$scope', '$http', '$location', '$w
                 recipe['succ_sum'] += recipe['succ_individual'][ship] || 0;
             });
             recipe['prob'] = 100.0 * recipe['succ_sum'] / recipe['sum'];
+            recipe['expected_res_usage'] = recipe['resources'].map(function (e) {
+                return (e * (100 / recipe['prob'])).toFixed(0);
+            }).join('/');
         }
 
         function compareProb(a, b) {

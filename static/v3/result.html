@@ -35,7 +35,12 @@
                     ng-click="recipeClick(constructType, recipe.resources)" class="tr-recipe">
                     <td ng-repeat="resource in recipe.resources track by $index">{{ resource }}</td>
                     <td>{{ recipe.prob.toFixed(6) }}% ({{ recipe.succ_sum }}/{{ recipe.sum }})</td>
-                    <td>{{ (100/recipe.prob).toFixed(2) }}</td>
+                    <td>
+                        {{ (100/recipe.prob).toFixed(2) }}
+                        <md-tooltip>
+                            Expected Resource Usage: {{ recipe.expected_res_usage }}
+                        </md-tooltip>
+                    </td>
                     <td ng-repeat="ship in selectedShips">
                         <span ng-if="recipe.succ_individual[ship['id']]">
                         {{ (100.0*recipe.succ_individual[ship['id']]/recipe.sum).toFixed(6) }}% ({{ recipe.succ_individual[ship['id']] }})
