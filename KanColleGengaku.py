@@ -1,12 +1,13 @@
-import json
-import gzip
 from math import sqrt
 
-from store import *
+import functools
+import gzip
+import json
 from flask import Flask, render_template, request, after_this_request, abort, jsonify
 from io import BytesIO as IO
-import functools
+
 import ctype_data
+from store import *
 
 
 def gzipped(f):
@@ -51,7 +52,8 @@ ship_names = {}
 for t in ship_list.values():
     for ship_id in t:
         ship_names[ship_id] = t[ship_id]
-ship_list_sorted = [{'id': i, 'name': ship_types[i], 'ships': []} for i in sorted(ship_types.keys(), key=lambda x: int(x))]
+ship_list_sorted = [{'id': i, 'name': ship_types[i], 'ships': []} for i in
+                    sorted(ship_types.keys(), key=lambda x: int(x))]
 for ship_type in ship_list_sorted:
     if ship_type['id'] in ship_list:
         ship_type['ships'] = [ctype_data.data[i] for i in sorted(ship_list[ship_type['id']], key=lambda x: int(x))]
@@ -82,9 +84,11 @@ def get_data():
                 probability = succ_sum / value['sum']
                 results[cons_type].append({'resource': key, 'probability': probability,
                                            'succ_sum': succ_sum, 'succ_individual': succ_individual,
-                                           'sum': value['sum'], 'stddev': sqrt(probability * (1 - probability) / value['sum'])})
+                                           'sum': value['sum'],
+                                           'stddev': sqrt(probability * (1 - probability) / value['sum'])})
         results[cons_type].sort(key=lambda x: x['probability'], reverse=True)
-    return render_template('result.html', results=results, target_ships={i: ship_names[i] for i in target_ships}, list=list)
+    return render_template('result.html', results=results, target_ships={i: ship_names[i] for i in target_ships},
+                           list=list)
 
 
 @app.route('/recipe')
@@ -168,6 +172,12 @@ def exp_calculator():
 @app.route('/v3/')
 def v3():
     return render_template('v3.html')
+
+
+@app.route('/kcv_lsc/')
+@gzipped
+def kcv_lsc():
+    return render_template('kcv_lsc.html')
 
 
 if __name__ == '__main__':
