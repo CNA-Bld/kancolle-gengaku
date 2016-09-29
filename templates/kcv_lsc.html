@@ -37,6 +37,10 @@
                 mst_ship = data;
             });
 
+            function int(number) {
+                return Math[number < 0 ? 'ceil' : 'floor'](number);
+            };
+
             function calcGroupProb() {
                 groupProb = {};
 
@@ -84,11 +88,11 @@
                         idProbWithinGroup[group][j] = 0;
                     }
                     if (groupProb[group] > 0) {
-                        var num3 = Math.floor((resources[2] - resourceFactors[group][2][0]) * resourceFactors[group][2][1]);
-                        var num4 = Math.floor((resources[0] - resourceFactors[group][0][0]) * resourceFactors[group][0][1]);
-                        var num5 = Math.floor((resources[1] - resourceFactors[group][1][0]) * resourceFactors[group][1][1]);
-                        var num6 = Math.floor((resources[3] - resourceFactors[group][3][0]) * resourceFactors[group][3][1]);
-                        var num7 = Math.floor((resources[4] - resourceFactors[group][4][0]) * resourceFactors[group][4][1]);
+                        var num3 = int((resources[2] - resourceFactors[group][2][0]) * resourceFactors[group][2][1]);
+                        var num4 = int((resources[0] - resourceFactors[group][0][0]) * resourceFactors[group][0][1]);
+                        var num5 = int((resources[1] - resourceFactors[group][1][0]) * resourceFactors[group][1][1]);
+                        var num6 = int((resources[3] - resourceFactors[group][3][0]) * resourceFactors[group][3][1]);
+                        var num7 = int((resources[4] - resourceFactors[group][4][0]) * resourceFactors[group][4][1]);
                         var num8 = num3 + num4 + num5 + num6 + num7;
                         for (var num9 = 0; num9 < Math.max(num8, 1); num9++) {
                             var real_num9 = (num9 > 50) ? 50 : num9;
