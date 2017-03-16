@@ -15,5 +15,5 @@ with open(JSON_DB_PATH + 'ship_classes.json', 'r', encoding='utf-8') as f:
 with open(JSON_DB_PATH + 'ships.json', 'r', encoding='utf-8') as f:
     for line in f.readlines():
         ship = json.loads(line)
-        data[str(ship['id'])] = {'id': str(ship['id']), 'name': ship['name']['ja_jp'], 'ctype': classes[ship['class']],
-                                 'cid': ship['class_no']}
+        data[str(ship['id'])] = {'id': str(ship['id']), 'name': ship['name']['ja_jp'], 'ctype': classes.get(ship['class'], ''),
+                                 'cid': ship['class_no'] or ''}
